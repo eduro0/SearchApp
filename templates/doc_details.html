@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    h1 {
+      text-align: center;
+    }
+  </style>
+
+<h1>Tweet Details</h1>
+
+<div class="box">
+    
+    
+    
+    <p><strong>Doc Id: </strong>{{doc_details.id}}</p>
+    <p><strong>Title: </strong>{{doc_details.title}}</p>
+    <p><strong>Tweet: </strong>{{doc_details.description}}</p>
+    
+    <p><strong>Published Date: </strong> {{doc_details.doc_date}}</p>
+    <p><strong >Hastags: </strong> {{doc_details.hashtags}}</p>
+    <p><strong >Likes: </strong>  {{doc_details.likes}}</p>
+    <p><strong >Retweets: </strong>  {{doc_details.retweets}}</p>
+   
+</div>
+<div><form method="POST" onsubmit="return validateForm();" action="/search">
+    
+    <input type="hidden" name="search-query" value="{{ search_data.search_query }}">
+    <input type="hidden" name="option" value="{{ search_data.algorithm}}">
+    <input type="hidden" name="Top_k" value="{{ search_data.top_k }}">
+
+
+    <input type="submit" value="Go Back">
+</form></div>
+
+{% endblock %}

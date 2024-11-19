@@ -1,0 +1,298 @@
+<!-- Dashboard Template to display different visualizations-->
+<!-- What data and visualizations do we want to display here? -->
+<!-- Questions : 
+    How to the users use our website?
+                  What are the most visited documents? (highest counts)
+                  What are the most searched queries?
+                  What are the most searched terms? (wordcloud?)
+                  How many visitors do we have? (or better how many visits?)
+
+
+    Hints from template 
+    -Examples of what to show in Dashboard:
+
+    - Ranking of visited documents (from results page)
+    - Visitor's preferred browsers
+    - Visitor's city (from IP)
+    - preferred queries ranking
+    - preferred terms
+    - etc.
+-----------------------------------------------------------------
+    What data do we already have?
+    from analytics.py:
+    - time spent on page
+    - search queries 
+    - used algorithm
+    - clicked documents
+    - results
+    - IP address (to get location)
+    - doc time spent
+    - doc sentiment
+-->
+{% extends "base.html" %}
+{% block content %}
+  <title>Bootstrap Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 750px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+        
+    /* On small screens, set height to 'auto' for the grid */
+    @media screen and (max-width: 1867px) {
+      .row.content {height: auto;} 
+    }
+  </style>
+</head>
+<body>
+
+
+
+<!-- Here we can display different views and visualizations on our analytics data-->
+<div class="container-fluid">
+  <div class="row content">
+    <br>
+    
+    <div class="col-sm-15">
+      <div class="well">
+        <h4>Most frequent queries </h4>
+  
+        <!-- Here we can access the fact tables if we plan to use them -->
+        <p>{{analytics_data.fact_clicks}}</p>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>User context</h4>
+            <h5>Number of users</h5>
+            <p>#Ip registered through /index </p> 
+            <h5>(Countries/Cities of users)</h5>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Most popular tweets visited in our search engine</h4>
+            <p>Ranking of visited tweets</p> 
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Sessions</h4>
+            <p>Number of sessions</p> 
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Time spent on our search engine</h4>
+            <p>30%</p> 
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="well">
+            <p>Queries</p> 
+            <a href="/">
+              <img src="{{ url_for('static', filename='wordcloud.png') }}" width="100" alt="Word Cloud"/>
+            </a>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="well">
+            <p>Text</p> 
+            <p>Text</p> 
+            <p>Text</p> 
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="well">
+            <p>Text</p> 
+            <p>Text</p> 
+            <p>Text</p> 
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="well">
+            <p>Text</p> 
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="well">
+            <p>Text</p> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Code provided from the original template to dynamically run code (to access data from pickle files?)-->
+
+    <script>
+        // 'visited_docs' is the data coming from Python code.
+        // load the python list in the JS variable 'visits_list':
+        const visits_list = { visited_docs, tojson, safe };
+        console.log("visited docs: ")
+        console.log(visits_list)
+    </script>
+
+    <h5>Ranking of Visited Documents</h5>
+    <canvas id="dailyVisits" width="800" height="1"></canvas>
+
+
+    <script>
+        // use JS map function top get just the tweet ids as labels
+        const visitsLabels = visits_list.map(a => "id: " + a.doc_id);
+        const visitsData = visits_list.map(a => a.counter);
+        const chartData1 = {
+            labels: visitsLabels,
+            datasets: [{
+                label: 'Visits count',
+                // data: [65, 59, 80, 81, 56, 55, 40],
+                data: visitsData,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
+
+        const ctx = document.getElementById('dailyVisits').getContext('2d');
+
+        // This will render the chart
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: chartData1,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+    </script>
+
+    <hr>
+    <h5>Print Python data for verification with graph above...</h5>
+    {% for doc in visited_docs %}
+        <div class="pb-3">
+            <div class="">
+                <span class="text-dark"> ({{ doc.counter }} visits) </span> — id: {{ doc.doc_id }}
+                — {{ doc.description }}
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+
+
+
+    <script>
+        // another example
+        const data2 = {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // This will render the chart
+        new Chart(document.getElementById("dailyVisits2"), {
+            type: 'bar',
+            data: {
+                labels: myLabels,
+                datasets: [{
+                    data: [1, 2, 3],
+                    label: "Alberta",
+                    borderColor: "#3e95cd",
+                    fill: false
+                }, {
+                    data: [1, 2, 3],
+                    label: "BC",
+                    borderColor: "#8e5ea2",
+                    fill: false
+                }, {
+                    data: [1, 2, 3],
+                    label: "Manitoba",
+                    borderColor: "#3cba9f",
+                    fill: false
+                }, {
+                    data: [1, 2, 3],
+                    label: "New Brunswick",
+                    borderColor: "#e8c3b9",
+                    fill: false
+                }, {
+                    data: [1, 2, 3],
+                    label: "NL",
+                    borderColor: "#c45850",
+                    fill: false
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Some title'
+                },
+                hover: {
+                    mode: 'index',
+                    intersect: true
+                },
+            }
+        });
+
+
+    </script>
+
+    <script>
+      // Assuming this script is at the end of your HTML body for better performance
+
+      // Get the container div
+      var container = document.getElementById("wordcloud-container");
+
+      // Create an img element
+      var img = document.createElement("img");
+      img.src = "wordcloud.png";
+      img.alt = "Word Cloud Image";
+      img.width = 800;
+      img.height = 400;
+
+      // Append the img element to the container div
+      container.appendChild(img);
+    </script>
+
+
+    <canvas id="dailyVisits2" width="800" height="800"></canvas>
+
+
+
+{% endblock %}

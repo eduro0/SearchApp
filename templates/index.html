@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block page_title %}{{ page_title }}{% endblock %}
+{% block content %}
+    <div class="centered">
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <form  method="POST" onSubmit='return validate();' action="/search">
+            <div class="d-flex">
+            
+            <input class="form-control me-2" name="search-query" type="search" placeholder="Search" aria-label="Search"
+                   autofocus="autofocus">
+            <button class="btn btn-primary" type="submit" onclick='this.form.submit();'>Search</button>
+            <input name="upf-irwa-hidden" type="hidden" value="123">
+            </div>
+            
+            <label for="option">Select ranking algorithm:</label>
+            <select id="option" name="option">
+            <option value="option1">Our score</option>
+            <option value="option2">TF-IDF</option>
+            <option value="option3">Conjuctive</option>
+            </select>
+            
+            <label for="Top_k">Top K Results:</label>
+            <input type="number" id="Top_k" name="Top_k" value="50" required step="1",>
+        
+           
+            
+        </form>
+        
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+    </div>
+{% endblock %}

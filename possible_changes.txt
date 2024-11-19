@@ -1,0 +1,10 @@
+UI:
+
+--> add a better visualization of the documents
+--> add more algorithms to the search
+--> get more data per session
+--> create new options for search (top-k, algorithm, etc.)  
+--> clean up the code, specially algorithms.py
+--> not take the intersaction of all query terms
+--> add the option of having information needs
+--> add other items that are considered relevant in the result
